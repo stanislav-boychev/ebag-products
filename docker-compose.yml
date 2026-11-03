@@ -1,0 +1,20 @@
+# Local Postgres for development.
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ebag
+      POSTGRES_PASSWORD: ebag   # local development only
+      POSTGRES_DB: products
+    ports:
+      - "5433:5432"             # 5433 on the host, so it never clashes with a local Postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ebag -d products"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  pgdata:
